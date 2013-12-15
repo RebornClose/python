@@ -1,0 +1,71 @@
+
+
+import urllib2
+import urllib
+import os
+import urllister
+imagepath=[]
+
+#cd 函数用于判断路径是否正确，如正确则改变当前工作路径
+def cd(ss):
+    try:
+        os.chdir(ss)
+        print '改变工作目录为'+ss
+        return 0
+    except:
+        print '输入图片保存路径有误，请重新输入'
+        return 1
+
+#addimagepath，该函数将图片路径添加到imagepath这个list中
+def addimagepath(surl):
+    if 'http://' in surl 
+        imagepath.append(surl)
+        print '找到图片：'+surl.split('/')[-1]+'图片地址为：'+surl
+    else:
+        surl=str_url+surl
+        imagepath.append(surl)
+        print '找到图片：'+surl.split('/')[-1]+'图片地址为：'+surl
+
+#下载图片
+def image_down(list_image):
+    if not list_image:
+        print "该页面没有任何图片"
+    else:
+        for image in list_image:
+            try:
+                urllib.urlretrieve(image,image.split('/')[-1]) #利用image.split('/')[-1]获得文件名
+                print "来自"+image+"的图片保存成功！"
+            except:
+                print "来自"+image+"图片没有保存成功，继续保存下一张图片...."
+
+print "请输入网页的url地址："
+str_url=raw_input()
+
+print "请输入图片保存地址，如果直接回车将默认保存到我的文档"
+
+temp=1
+while temp:
+    str_save=raw_input()
+    if not str_save:
+        str_save='E:/Fei_Doc'
+    temp=cd(str_save)
+    
+
+
+try:
+    sock=urllib2.urlopen(str_url)
+    print "页面连接成功！开始获取图片地址……"
+except:
+    print "sorry，输入的地址有误或页面无法连接，程序将自动退出"
+
+parser=urllister.URLLister()
+parser.feed(sock.read())
+sock.close()
+parser.close()
+for url in parser.urls:
+    addimagepath(url)
+
+#调用图片下载函数
+image_down(imagepath)
+
+#程序结束
