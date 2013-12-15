@@ -95,3 +95,17 @@ for url in parser.urls:
 image_down(imagepath)
 
 #程序结束
+尽管这个程序能基本上解决问题，不过我发现有一些不足：
+1、如果页面的img标签后面没有直接跟src属性，比如复杂一点的img代码：
+ <img border="0" onload="
+function onload(event) {
+javascript:
+    if (this.width > screen.width - 333) {
+        this.width = screen.width - 333;
+    }
+}
+" src="http://bbs.263.net/forumData/119/2860134_1.jpg" alt="按此在新窗口浏览图片" />
+
+那么urllister便无法识别了。不过这个问题解决起来比较容易，直接对html代码每行代码进行分析，利用split('src')，可以得到所有src标签的内容，然后根据后缀是否为jpg，gif等得到图片文件地址。
+        
+
